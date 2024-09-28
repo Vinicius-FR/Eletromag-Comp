@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# Author: Daniel Pasut <daniel.pasut@uoit.ca>
-
 import numpy as np
 #import seaborn as sns
 import matplotlib.pyplot as plt
