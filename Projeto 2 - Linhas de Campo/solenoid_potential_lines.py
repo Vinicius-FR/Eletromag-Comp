@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from numpy import linalg as LA
 from tqdm import tqdm
 
-gs = 30  # Grid spacing
+gs = 100  # Grid spacing
 R = 0.5  # Radius of loop (mm)
 wr = 0.1  # Radius of wire (mm)
 p = 0.1  # Pitch of wire, center-to-center (mm)
@@ -112,6 +112,27 @@ def plot_zy_plane():
     plt.savefig('vector-potential-zy-plane.png', transparent=True, bbox_inches='tight', pad_inches=0)
     plt.show()
 
+# Função para calcular o vetor potencial A em função da distância radial r
+def plot_A_vs_r():
+    r_values = np.linspace(0.01, 2.0, gs)  # Valores de r variando de perto do eixo até 2 mm
+    A_values = np.zeros(gs)  # Array para armazenar os valores de A para cada r
+    
+    # Calcula o vetor potencial A para cada valor de r
+    for i, r in enumerate(r_values):
+        pos_r = np.array([r, 0, z_fixed])  # Ponto de observação a distância r do eixo
+        A_r = find_A(pos_r, theta, R, N, wr)  # Calcular o vetor potencial no ponto
+        A_values[i] = LA.norm(A_r)  # Armazena o valor da norma de A (magnitude)
+    
+    # Plotar A em função de r
+    plt.figure(figsize=(10, 8))
+    plt.plot(r_values, A_values, label=r'$|A|$ vs r', color='b')
+    plt.xlabel('Distância radial r (mm)', fontsize=20)
+    plt.ylabel('Potencial Vetorial |A| (T.mm)', fontsize=20)
+    plt.title('Potencial Vetorial A em função da distância radial r', fontsize=22)
+    plt.grid(True)
+    plt.legend(fontsize=15)
+    plt.savefig('A_vs_r.png', transparent=True, bbox_inches='tight', pad_inches=0)
+    plt.show()
 
 if __name__ == '__main__':
     # Initialize theta
@@ -120,6 +141,9 @@ if __name__ == '__main__':
 
     # Compute the vector potential in both planes
     norms_xy, norms_zy = find_field()
+
+    # Plotar A em função da distância radial r
+    plot_A_vs_r()
 
     # Plot the vector potential field for both xy-plane and zy-plane
     plot_xy_plane()
